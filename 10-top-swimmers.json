@@ -1,0 +1,50 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Horizontal stacked bar chart of Australia's most decorated Olympic swimmers by career medal total (gold, silver, bronze).",
+  "title": "Australia's Most Decorated Olympic Swimmers — Career Medals",
+  "width": "container",
+  "height": 280,
+  "data": {
+    "values": [
+      {"name": "Emma McKeon",    "medal": "Gold",   "count": 6,  "order": 1},
+      {"name": "Emma McKeon",    "medal": "Silver",  "count": 3,  "order": 2},
+      {"name": "Emma McKeon",    "medal": "Bronze",  "count": 5,  "order": 3},
+      {"name": "Dawn Fraser",    "medal": "Gold",   "count": 4,  "order": 1},
+      {"name": "Dawn Fraser",    "medal": "Silver",  "count": 4,  "order": 2},
+      {"name": "Dawn Fraser",    "medal": "Bronze",  "count": 0,  "order": 3},
+      {"name": "Ian Thorpe",     "medal": "Gold",   "count": 5,  "order": 1},
+      {"name": "Ian Thorpe",     "medal": "Silver",  "count": 3,  "order": 2},
+      {"name": "Ian Thorpe",     "medal": "Bronze",  "count": 1,  "order": 3},
+      {"name": "Leisel Jones",   "medal": "Gold",   "count": 3,  "order": 1},
+      {"name": "Leisel Jones",   "medal": "Silver",  "count": 5,  "order": 2},
+      {"name": "Leisel Jones",   "medal": "Bronze",  "count": 1,  "order": 3},
+      {"name": "Kaylee McKeown", "medal": "Gold",   "count": 4,  "order": 1},
+      {"name": "Kaylee McKeown", "medal": "Silver",  "count": 1,  "order": 2},
+      {"name": "Kaylee McKeown", "medal": "Bronze",  "count": 2,  "order": 3},
+      {"name": "Grant Hackett",  "medal": "Gold",   "count": 3,  "order": 1},
+      {"name": "Grant Hackett",  "medal": "Silver",  "count": 2,  "order": 2},
+      {"name": "Grant Hackett",  "medal": "Bronze",  "count": 2,  "order": 3},
+      {"name": "Susie O'Neill",  "medal": "Gold",   "count": 2,  "order": 1},
+      {"name": "Susie O'Neill",  "medal": "Silver",  "count": 3,  "order": 2},
+      {"name": "Susie O'Neill",  "medal": "Bronze",  "count": 2,  "order": 3},
+      {"name": "Shane Gould",    "medal": "Gold",   "count": 3,  "order": 1},
+      {"name": "Shane Gould",    "medal": "Silver",  "count": 1,  "order": 2},
+      {"name": "Shane Gould",    "medal": "Bronze",  "count": 1,  "order": 3}
+    ]
+  },
+  "mark": {"type": "bar", "cornerRadiusTopLeft": 3, "cornerRadiusTopRight": 3},
+  "encoding": {
+    "y": {"field": "name",  "type": "nominal", "title": "Athlete", "sort": "-x"},
+    "x": {"field": "count", "type": "quantitative", "title": "Medals", "stack": "zero"},
+    "color": {
+      "field": "medal", "type": "nominal",
+      "scale": {"domain": ["Gold", "Silver", "Bronze"], "range": ["#f4c430", "#c0c0c0", "#cd7f32"]}
+    },
+    "order": {"field": "order"},
+    "tooltip": [
+      {"field": "name",  "title": "Athlete"},
+      {"field": "medal", "title": "Medal Type"},
+      {"field": "count", "title": "Count"}
+    ]
+  }
+}
