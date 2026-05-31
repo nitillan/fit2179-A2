@@ -508,6 +508,41 @@
 <hr class="divider" />
 
 <!-- ══════════════════════════════════════════
+     SECTION 2B — BUMP + DONUT + ANNOTATED
+══════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-label">Section 02 · continued</div>
+  <div class="section-title">The <em>Rise & Fall</em> of a Dynasty</div>
+  <p class="section-body">
+    Australia's dominance hasn't been constant — the 1970s saw a dramatic slump before
+    a golden revival through the 1990s and 2000s. These three visualisations show the
+    bigger picture: how Australia's ranking shifted over time, how dominant swimming is
+    within Australia's overall Olympic identity, and the key moments that defined the story.
+  </p>
+
+  <div class="chart-card">
+    <h3>Australia's Swimming Medal Rank Among All Nations — Per Games</h3>
+    <p class="chart-note">Rank 1 = most swimming medals that Games. Rank goes down = Australia improving. Hover for details.</p>
+    <div id="chart-bump"></div>
+  </div>
+
+  <div class="chart-row cols-2">
+    <div class="chart-card">
+      <h3>Swimming vs All Other Sports — Share of Australian Olympic Medals</h3>
+      <p class="chart-note">Over one third of every Australian Olympic medal has come from the pool.</p>
+      <div id="chart-donut"></div>
+    </div>
+    <div class="chart-card">
+      <h3>Gold Medal Trendline with Key Moments Annotated</h3>
+      <p class="chart-note">The swimmers who defined each era, marked on Australia's gold medal timeline.</p>
+      <div id="chart-annotated"></div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider" />
+
+<!-- ══════════════════════════════════════════
      SECTION 3 — AUSTRALIA VS THE WORLD
 ══════════════════════════════════════════ -->
 <div class="section">
@@ -1187,6 +1222,165 @@ vegaEmbed("#chart-swimmers", {
       {field:"count",title:"Count"}
     ]
   }
+}, {actions:false, renderer:"svg"});
+
+// ══════════════════════════════════════
+// CHART 11 — BUMP CHART (Australia's rank per Games)
+// ══════════════════════════════════════
+const bumpData = [
+  {year:1900,rank:1},{year:1908,rank:2},{year:1912,rank:2},
+  {year:1924,rank:3},{year:1948,rank:3},{year:1952,rank:2},
+  {year:1956,rank:2},{year:1960,rank:2},{year:1964,rank:2},
+  {year:1968,rank:2},{year:1972,rank:2},{year:1976,rank:5},
+  {year:1980,rank:4},{year:1984,rank:3},{year:1988,rank:3},
+  {year:1992,rank:3},{year:1996,rank:2},{year:2000,rank:2},
+  {year:2004,rank:2},{year:2008,rank:2},{year:2012,rank:3},
+  {year:2016,rank:3},{year:2021,rank:2},{year:2024,rank:2}
+];
+
+vegaEmbed("#chart-bump", {
+  $schema: "https://vega.github.io/schema/vega-lite/v5.json",
+  config: cfg,
+  width: 680,
+  height: 280,
+  data: {values: bumpData},
+  layer: [
+    {
+      mark: {type:"line", strokeWidth:3, color:FOAM, point:{filled:true, fill:GOLD, size:80}},
+      encoding: {
+        x: {field:"year", type:"ordinal", title:"Olympic Year", axis:{labelAngle:-45}},
+        y: {field:"rank", type:"quantitative", title:"Medal Rank (1 = Best)",
+            scale:{domain:[6,1]},
+            axis:{tickMinStep:1}},
+        tooltip:[
+          {field:"year", title:"Year"},
+          {field:"rank", title:"Australia's Rank"}
+        ]
+      }
+    },
+    {
+      mark: {type:"text", dy:-14, fontSize:11, fontWeight:"bold", color:GOLD},
+      encoding: {
+        x: {field:"year", type:"ordinal"},
+        y: {field:"rank", type:"quantitative", scale:{domain:[6,1]}},
+        text: {field:"rank", type:"quantitative"}
+      }
+    }
+  ]
+}, {actions:false, renderer:"svg"});
+
+// ══════════════════════════════════════
+// CHART 12 — DONUT CHART
+// ══════════════════════════════════════
+const donutData = [
+  {category: "Swimming", medals: 239},
+  {category: "Athletics", medals: 84},
+  {category: "Cycling",   medals: 58},
+  {category: "Rowing",    medals: 55},
+  {category: "Sailing",   medals: 42},
+  {category: "Other",     medals: 132}
+];
+
+vegaEmbed("#chart-donut", {
+  $schema: "https://vega.github.io/schema/vega-lite/v5.json",
+  config: cfg,
+  width: 280,
+  height: 280,
+  data: {values: donutData},
+  layer: [
+    {
+      mark: {type:"arc", innerRadius:80, outerRadius:130, padAngle:0.02, cornerRadius:4},
+      encoding: {
+        theta: {field:"medals", type:"quantitative"},
+        color: {
+          field:"category", type:"nominal",
+          scale:{
+            domain:["Swimming","Athletics","Cycling","Rowing","Sailing","Other"],
+            range:[GOLD, FOAM, "#5b9ede", "#8bbfde", "#3a7fc1", "#2a4a6a"]
+          },
+          legend:{orient:"right", labelColor:MUTED, titleColor:MUTED}
+        },
+        tooltip:[
+          {field:"category", title:"Sport"},
+          {field:"medals", title:"Total Medals"}
+        ]
+      }
+    },
+    {
+      mark: {type:"text", fontSize:28, fontWeight:"bold", color:GOLD, font:"Bebas Neue"},
+      data: {values:[{label:"39%"}]},
+      encoding: {text:{field:"label"}}
+    },
+    {
+      mark: {type:"text", fontSize:11, color:MUTED, dy:22},
+      data: {values:[{label:"from swimming"}]},
+      encoding: {text:{field:"label"}}
+    }
+  ]
+}, {actions:false, renderer:"svg"});
+
+// ══════════════════════════════════════
+// CHART 13 — ANNOTATED TIMELINE
+// ══════════════════════════════════════
+const annotatedGold = [
+  {year:1956, gold:8,  label:"Dawn Fraser\n1st gold"},
+  {year:1960, gold:5,  label:""},
+  {year:1964, gold:5,  label:"Fraser 3-peat"},
+  {year:1968, gold:4,  label:""},
+  {year:1972, gold:5,  label:"Shane Gould\n5 medals"},
+  {year:1976, gold:0,  label:"Slump"},
+  {year:1980, gold:2,  label:""},
+  {year:1984, gold:3,  label:""},
+  {year:1988, gold:2,  label:""},
+  {year:1992, gold:4,  label:""},
+  {year:1996, gold:5,  label:"Susie O'Neill\ngold"},
+  {year:2000, gold:5,  label:"Thorpe &\nHackett era"},
+  {year:2004, gold:7,  label:"Peak Thorpe"},
+  {year:2008, gold:6,  label:""},
+  {year:2012, gold:1,  label:"Low point"},
+  {year:2016, gold:3,  label:""},
+  {year:2021, gold:9,  label:"McKeon\n7 medals"},
+  {year:2024, gold:7,  label:"McKeown\ndefends"}
+];
+
+const annotationPoints = annotatedGold.filter(d => d.label !== "");
+
+vegaEmbed("#chart-annotated", {
+  $schema: "https://vega.github.io/schema/vega-lite/v5.json",
+  config: cfg,
+  width: 280,
+  height: 280,
+  data: {values: annotatedGold},
+  layer: [
+    {
+      mark: {type:"area",
+             color:{gradient:"linear",
+               stops:[{offset:0,color:GOLD+"55"},{offset:1,color:GOLD+"00"}]},
+             line:{color:GOLD, strokeWidth:2}},
+      encoding: {
+        x: {field:"year", type:"ordinal", axis:{labelAngle:-45, labelFontSize:9}},
+        y: {field:"gold", type:"quantitative", title:"Gold Medals"}
+      }
+    },
+    {
+      data: {values: annotationPoints},
+      mark: {type:"point", filled:true, color:GOLD, size:80},
+      encoding: {
+        x: {field:"year", type:"ordinal"},
+        y: {field:"gold", type:"quantitative"},
+        tooltip:[{field:"year",title:"Year"},{field:"gold",title:"Golds"},{field:"label",title:"Moment"}]
+      }
+    },
+    {
+      data: {values: annotationPoints.filter(d=>d.gold > 4)},
+      mark: {type:"text", fontSize:9, color:FOAM, dy:-18, lineBreak:"\n", align:"center"},
+      encoding: {
+        x: {field:"year", type:"ordinal"},
+        y: {field:"gold", type:"quantitative"},
+        text: {field:"label"}
+      }
+    }
+  ]
 }, {actions:false, renderer:"svg"});
 
 </script>
