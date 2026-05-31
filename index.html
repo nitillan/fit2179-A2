@@ -184,6 +184,7 @@
     /* ── CHART CARD ── */
     .chart-card {
       width: 100%;
+      overflow-x: auto;
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 12px;
@@ -917,8 +918,7 @@ const heatData = [
 vegaEmbed("#chart-stacked-bar", {
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
   config: cfg,
-  width: "container",
-  autosize: {type:"fit", resize:true, contains:"padding"},
+  width: 760,
   height: 280,
   data: {values: swimFlat},
   mark: {type:"bar", cornerRadiusTopLeft:2, cornerRadiusTopRight:2},
@@ -947,8 +947,7 @@ const goldOnly = swimData.filter(d=>d.gold+d.silver+d.bronze>0).map(d=>({year:d.
 vegaEmbed("#chart-gold-line", {
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
   config: cfg,
-  width: "container",
-  autosize: {type:"fit", resize:true, contains:"padding"},
+  width: 760,
   height: 200,
   data: {values: goldOnly},
   layer: [
@@ -979,8 +978,7 @@ vegaEmbed("#chart-gold-line", {
 vegaEmbed("#chart-share-area", {
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
   config: cfg,
-  width: "container",
-  autosize: {type:"fit", resize:true, contains:"padding"},
+  width: 760,
   height: 200,
   data: {values: shareData},
   layer:[
@@ -1003,8 +1001,7 @@ vegaEmbed("#chart-share-area", {
 vegaEmbed("#chart-map", {
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
   config: cfg,
-  width: "container",
-  autosize: {type:"fit", resize:true, contains:"padding"},
+  width: 760,
   height: 340,
   projection: {type:"mercator"},
   layer:[
@@ -1085,8 +1082,7 @@ vegaEmbed("#chart-map", {
 vegaEmbed("#chart-state-bar", {
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
   config: cfg,
-  width: "container",
-  autosize: {type:"fit", resize:true, contains:"padding"},
+  width: 760,
   height: 200,
   data: {values: stateData.sort((a,b)=>b.medals-a.medals)},
   mark: {type:"bar", color:FOAM, cornerRadiusTopRight:4, cornerRadiusTopLeft:4},
@@ -1103,8 +1099,7 @@ vegaEmbed("#chart-state-bar", {
 vegaEmbed("#chart-gender", {
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
   config: cfg,
-  width: "container",
-  autosize: {type:"fit", resize:true, contains:"padding"},
+  width: 760,
   height: 200,
   data: {values: genderFlat},
   mark: {type:"bar", cornerRadiusTopLeft:3, cornerRadiusTopRight:3},
@@ -1127,8 +1122,7 @@ vegaEmbed("#chart-gender", {
 vegaEmbed("#chart-nations-lollipop", {
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
   config: cfg,
-  width: "container",
-  autosize: {type:"fit", resize:true, contains:"padding"},
+  width: 760,
   height: 300,
   data: {values: nationsData},
   layer:[
@@ -1163,8 +1157,7 @@ vegaEmbed("#chart-nations-lollipop", {
 vegaEmbed("#chart-per-capita", {
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
   config: cfg,
-  width: "container",
-  autosize: {type:"fit", resize:true, contains:"padding"},
+  width: 760,
   height: 280,
   data: {values: perCapData},
   mark:{type:"bar", cornerRadiusTopRight:4, cornerRadiusTopLeft:4},
@@ -1185,8 +1178,7 @@ vegaEmbed("#chart-per-capita", {
 vegaEmbed("#chart-heatmap", {
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
   config: cfg,
-  width: "container",
-  autosize: {type:"fit", resize:true, contains:"padding"},
+  width: 760,
   height: 280,
   data: {values: heatData},
   mark:{type:"rect", cornerRadius:3},
@@ -1211,8 +1203,7 @@ vegaEmbed("#chart-heatmap", {
 vegaEmbed("#chart-swimmers", {
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
   config: cfg,
-  width: "container",
-  autosize: {type:"fit", resize:true, contains:"padding"},
+  width: 760,
   height: 280,
   data: {values: swimmerFlat},
   mark:{type:"bar", cornerRadiusTopLeft:3, cornerRadiusTopRight:3},
@@ -1250,8 +1241,7 @@ const bumpData = [
 vegaEmbed("#chart-bump", {
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
   config: cfg,
-  width: "container",
-  autosize: {type:"fit", resize:true, contains:"padding"},
+  width: 760,
   height: 280,
   data: {values: bumpData},
   layer: [
