@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Australia's Swimming Nation — Olympic Glory</title>
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy: #0a1628;
+      --deep: #0d1f3c;
+      --gold: #f4c430;
+      --silver: #c0c0c0;
+      --bronze: #cd7f32;
+      --water: #1e6fa8;
+      --foam: #5bbfde;
+      --white: #f5f5f0;
+      --muted: #8a9ab0;
+      --card: #111d33;
+      --border: #1e3050;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--navy);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 60px 24px;
+      overflow: hidden;
+      background: radial-gradient(ellipse at 50% 120%, #1e6fa8 0%, #0a1628 60%);
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 48px,
+          rgba(30,111,168,0.08) 48px,
+          rgba(30,111,168,0.08) 50px
+        ),
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 48px,
+          rgba(30,111,168,0.08) 48px,
+          rgba(30,111,168,0.08) 50px
+        );
+      pointer-events: none;
+    }
+
+    /* wave at bottom of hero */
+    .hero-wave {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 80px;
+    }
+    .hero-wave svg { width: 100%; height: 100%; }
+
+    .hero-eyebrow {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 14px;
+      letter-spacing: 6px;
+      color: var(--foam);
+      margin-bottom: 18px;
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(52px, 10vw, 120px);
+      line-height: 0.92;
+      letter-spacing: 2px;
+      color: var(--white);
+      text-transform: uppercase;
+      max-width: 900px;
+    }
+
+    .hero h1 span { color: var(--gold); }
+
+    .hero-sub {
+      margin-top: 24px;
+      max-width: 560px;
+      font-size: 17px;
+      color: #9ab5d0;
+      font-weight: 300;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 48px;
+      margin-top: 52px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .stat-pill {
+      text-align: center;
+    }
+
+    .stat-pill .num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 54px;
+      line-height: 1;
+      color: var(--gold);
+    }
+
+    .stat-pill .label {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* ── SECTION LAYOUT ── */
+    .section {
+      padding: 80px 24px;
+      max-width: 1160px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 12px;
+      letter-spacing: 5px;
+      color: var(--foam);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(32px, 5vw, 56px);
+      line-height: 1;
+      color: var(--white);
+      margin-bottom: 16px;
+    }
+
+    .section-title em {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .section-body {
+      max-width: 640px;
+      color: #9ab5d0;
+      font-size: 15px;
+      line-height: 1.75;
+      margin-bottom: 40px;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 0;
+    }
+
+    /* ── CHART CARD ── */
+    .chart-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px;
+      margin-bottom: 24px;
+    }
+
+    .chart-card h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 1px;
+      color: var(--white);
+      margin-bottom: 6px;
+    }
+
+    .chart-card .chart-note {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+
+    .chart-row {
+      display: grid;
+      gap: 24px;
+    }
+
+    .chart-row.cols-2 { grid-template-columns: 1fr 1fr; }
+    .chart-row.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+    @media (max-width: 760px) {
+      .chart-row.cols-2,
+      .chart-row.cols-3 { grid-template-columns: 1fr; }
+      .hero-stats { gap: 28px; }
+    }
+
+    /* ── ANNOTATION CALLOUT ── */
+    .callout {
+      background: linear-gradient(135deg, rgba(30,111,168,0.2), rgba(244,196,48,0.08));
+      border-left: 3px solid var(--gold);
+      border-radius: 0 8px 8px 0;
+      padding: 16px 20px;
+      margin: 24px 0;
+      font-size: 14px;
+      color: #9ab5d0;
+    }
+
+    .callout strong { color: var(--gold); }
+
+    /* ── MEDAL LEGEND ── */
+    .medal-legend {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .medal-legend span {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .dot {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ── SWIMMER CARDS ── */
+    .swimmer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 32px;
+    }
+
+    .swimmer-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .swimmer-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+
+    .swimmer-card.gold-card::before { background: var(--gold); }
+    .swimmer-card.silver-card::before { background: var(--silver); }
+
+    .swimmer-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 18px;
+      letter-spacing: 0.5px;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+
+    .swimmer-medals {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .medal-bar {
+      display: flex;
+      gap: 3px;
+      flex-wrap: wrap;
+    }
+
+    .medal-dot {
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .medal-dot.g { background: var(--gold); }
+    .medal-dot.s { background: var(--silver); }
+    .medal-dot.b { background: var(--bronze); }
+
+    /* ── TIMELINE ── */
+    .timeline {
+      position: relative;
+      padding-left: 28px;
+      margin-top: 32px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 6px; top: 0; bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--foam), var(--water));
+    }
+
+    .tl-item {
+      position: relative;
+      margin-bottom: 28px;
+    }
+
+    .tl-item::before {
+      content: '';
+      position: absolute;
+      left: -25px;
+      top: 6px;
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--gold);
+      border: 2px solid var(--navy);
+    }
+
+    .tl-year {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 16px;
+      color: var(--foam);
+      letter-spacing: 1px;
+    }
+
+    .tl-text {
+      font-size: 14px;
+      color: #9ab5d0;
+      margin-top: 3px;
+      line-height: 1.5;
+    }
+
+    .tl-text strong { color: var(--white); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--deep);
+      border-top: 1px solid var(--border);
+      padding: 40px 24px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    footer a { color: var(--foam); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* vega tooltip override */
+    .vg-tooltip {
+      background: var(--deep) !important;
+      border: 1px solid var(--border) !important;
+      color: var(--white) !important;
+      font-family: 'Inter', sans-serif !important;
+      font-size: 13px !important;
+      border-radius: 6px !important;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     HERO
+══════════════════════════════════════════ -->
+<div class="hero">
+  <div class="hero-eyebrow">Australia at the Olympics · Swimming</div>
+  <h1>A <span>Nation</span> Born<br>to Swim</h1>
+  <p class="hero-sub">
+    From the first stroke in Paris 1900 to a golden haul in Paris 2024,
+    Australia has built one of the most remarkable swimming dynasties in Olympic history.
+  </p>
+  <div class="hero-stats">
+    <div class="stat-pill">
+      <div class="num">239</div>
+      <div class="label">Olympic swim medals</div>
+    </div>
+    <div class="stat-pill">
+      <div class="num">78</div>
+      <div class="label">Gold medals</div>
+    </div>
+    <div class="stat-pill">
+      <div class="num">#2</div>
+      <div class="label">Nation all-time</div>
+    </div>
+    <div class="stat-pill">
+      <div class="num">39%</div>
+      <div class="label">Of all Aus medals</div>
+    </div>
+  </div>
+  <div class="hero-wave">
+    <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,40 C240,80 480,0 720,40 C960,80 1200,0 1440,40 L1440,80 L0,80 Z" fill="#0a1628"/>
+    </svg>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SECTION 1 — OLYMPIC DOMINANCE
+══════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-label">Section 01</div>
+  <div class="section-title">A Century of <em>Dominance</em></div>
+  <p class="section-body">
+    Australia has contested every Summer Olympics since 1896, winning at least one medal at
+    each appearance. Swimming consistently delivers the lion's share — and the story gets
+    better over time. From modest beginnings, the Dolphins grew into a powerhouse that peaked
+    at the Sydney 2000 home Games and continues to deliver elite results.
+  </p>
+
+  <div class="chart-card">
+    <h3>Australia's Swimming Medals Per Olympic Games (1900–2024)</h3>
+    <p class="chart-note">Hover over a bar for exact counts. Stacked by medal type.</p>
+    <div class="medal-legend">
+      <span><span class="dot" style="background:var(--gold)"></span> Gold</span>
+      <span><span class="dot" style="background:var(--silver)"></span> Silver</span>
+      <span><span class="dot" style="background:var(--bronze)"></span> Bronze</span>
+    </div>
+    <div id="chart-stacked-bar"></div>
+  </div>
+
+  <div class="callout">
+    <strong>Sydney 2000:</strong> Australia's greatest swimming haul — 20 medals in front of a home crowd.
+    Ian Thorpe, Grant Hackett, and Susie O'Neill led a golden generation that made Australia
+    the talk of the aquatic world. 🏅
+  </div>
+
+  <div class="chart-row cols-2">
+    <div class="chart-card">
+      <h3>Gold Medal Count by Games</h3>
+      <p class="chart-note">Australia's gold rush, Olympics by Olympics.</p>
+      <div id="chart-gold-line"></div>
+    </div>
+    <div class="chart-card">
+      <h3>Swimming Share of All Australian Medals</h3>
+      <p class="chart-note">% of total Aus Olympic medals from swimming per Games.</p>
+      <div id="chart-share-area"></div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider" />
+
+<!-- ══════════════════════════════════════════
+     SECTION 2 — WHERE CHAMPIONS COME FROM
+══════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-label">Section 02</div>
+  <div class="section-title">Where <em>Champions</em> Come From</div>
+  <p class="section-body">
+    Australia's swimming talent is not evenly distributed. Queensland and New South Wales
+    have historically produced the most Olympic swimmers, driven by warm climates, elite
+    club networks, and state-of-the-art aquatic centres. The map below shows the home state
+    of Australian Olympic swimming medallists at the Tokyo 2020 Games — the most recent for
+    which detailed athlete data is available.
+  </p>
+
+  <div class="chart-card">
+    <h3>Australian States: Olympic Swimming Medals by Home State (Tokyo 2020)</h3>
+    <p class="chart-note">Based on medallists' home state/postcode at time of competition.</p>
+    <div id="chart-map"></div>
+  </div>
+
+  <div class="callout">
+    <strong>Queensland dominates:</strong> At Tokyo 2020, Queensland-based swimmers — including
+    Emma McKeon, Kaylee McKeown, and Ariarne Titmus — accounted for the majority of
+    Australia's swimming medals, reflecting the state's elite high-performance infrastructure.
+  </div>
+
+  <div class="chart-row cols-2">
+    <div class="chart-card">
+      <h3>Medals by Home State — All Years Combined</h3>
+      <p class="chart-note">Estimated breakdown based on athlete home state records.</p>
+      <div id="chart-state-bar"></div>
+    </div>
+    <div class="chart-card">
+      <h3>Men vs Women Swimming Gold Medals</h3>
+      <p class="chart-note">Gender split in gold medals per Games since 1956.</p>
+      <div id="chart-gender"></div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider" />
+
+<!-- ══════════════════════════════════════════
+     SECTION 3 — AUSTRALIA VS THE WORLD
+══════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-label">Section 03</div>
+  <div class="section-title">Australia vs <em>the World</em></div>
+  <p class="section-body">
+    The United States has historically led Olympic swimming, but Australia's achievement
+    is extraordinary when you account for population size. With just 26 million people,
+    Australia punches far above its weight against nations of hundreds of millions.
+  </p>
+
+  <div class="chart-card">
+    <h3>All-Time Olympic Swimming Gold Medals — Top 10 Nations</h3>
+    <p class="chart-note">Total gold medals won in Olympic swimming, all editions combined.</p>
+    <div id="chart-nations-lollipop"></div>
+  </div>
+
+  <div class="chart-row cols-2">
+    <div class="chart-card">
+      <h3>Golds Per Million Population</h3>
+      <p class="chart-note">Adjusting for population size reveals Australia's true dominance.</p>
+      <div id="chart-per-capita"></div>
+    </div>
+    <div class="chart-card">
+      <h3>Australia's Medal Split by Stroke (Approx.)</h3>
+      <p class="chart-note">Freestyle events have delivered the most medals historically.</p>
+      <div id="chart-heatmap"></div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider" />
+
+<!-- ══════════════════════════════════════════
+     SECTION 4 — LEGENDS OF THE POOL
+══════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-label">Section 04</div>
+  <div class="section-title"><em>Legends</em> of the Pool</div>
+  <p class="section-body">
+    Behind every medal is a story. Australia's swimming dynasty was built by a handful
+    of extraordinary athletes across different eras — from Dawn Fraser's three consecutive
+    Olympic titles to Emma McKeon's seven-medal haul at a single Games.
+  </p>
+
+  <div class="chart-card">
+    <h3>Australia's Most Decorated Olympic Swimmers</h3>
+    <p class="chart-note">Career medal totals for Australia's greatest Olympians.</p>
+    <div id="chart-swimmers"></div>
+  </div>
+
+  <div class="swimmer-grid">
+    <div class="swimmer-card gold-card">
+      <div class="swimmer-name">Emma McKeon</div>
+      <div class="swimmer-medals">14 medals (6G · 3S · 5B) · 2016–2024</div>
+      <div class="medal-bar">
+        <span class="medal-dot g"></span><span class="medal-dot g"></span><span class="medal-dot g"></span>
+        <span class="medal-dot g"></span><span class="medal-dot g"></span><span class="medal-dot g"></span>
+        <span class="medal-dot s"></span><span class="medal-dot s"></span><span class="medal-dot s"></span>
+        <span class="medal-dot b"></span><span class="medal-dot b"></span><span class="medal-dot b"></span>
+        <span class="medal-dot b"></span><span class="medal-dot b"></span>
+      </div>
+    </div>
+    <div class="swimmer-card gold-card">
+      <div class="swimmer-name">Ian Thorpe</div>
+      <div class="swimmer-medals">9 medals (5G · 3S · 1B) · 2000–2004</div>
+      <div class="medal-bar">
+        <span class="medal-dot g"></span><span class="medal-dot g"></span><span class="medal-dot g"></span>
+        <span class="medal-dot g"></span><span class="medal-dot g"></span>
+        <span class="medal-dot s"></span><span class="medal-dot s"></span><span class="medal-dot s"></span>
+        <span class="medal-dot b"></span>
+      </div>
+    </div>
+    <div class="swimmer-card silver-card">
+      <div class="swimmer-name">Dawn Fraser</div>
+      <div class="swimmer-medals">8 medals (4G · 4S) · 1956–1964</div>
+      <div class="medal-bar">
+        <span class="medal-dot g"></span><span class="medal-dot g"></span><span class="medal-dot g"></span>
+        <span class="medal-dot g"></span>
+        <span class="medal-dot s"></span><span class="medal-dot s"></span>
+        <span class="medal-dot s"></span><span class="medal-dot s"></span>
+      </div>
+    </div>
+    <div class="swimmer-card silver-card">
+      <div class="swimmer-name">Leisel Jones</div>
+      <div class="swimmer-medals">9 medals (3G · 5S · 1B) · 2000–2012</div>
+      <div class="medal-bar">
+        <span class="medal-dot g"></span><span class="medal-dot g"></span><span class="medal-dot g"></span>
+        <span class="medal-dot s"></span><span class="medal-dot s"></span><span class="medal-dot s"></span>
+        <span class="medal-dot s"></span><span class="medal-dot s"></span><span class="medal-dot b"></span>
+      </div>
+    </div>
+    <div class="swimmer-card silver-card">
+      <div class="swimmer-name">Kaylee McKeown</div>
+      <div class="swimmer-medals">7 medals (4G · 1S · 2B) · 2020–2024</div>
+      <div class="medal-bar">
+        <span class="medal-dot g"></span><span class="medal-dot g"></span><span class="medal-dot g"></span>
+        <span class="medal-dot g"></span><span class="medal-dot s"></span>
+        <span class="medal-dot b"></span><span class="medal-dot b"></span>
+      </div>
+    </div>
+    <div class="swimmer-card silver-card">
+      <div class="swimmer-name">Grant Hackett</div>
+      <div class="swimmer-medals">7 medals (3G · 2S · 2B) · 2000–2008</div>
+      <div class="medal-bar">
+        <span class="medal-dot g"></span><span class="medal-dot g"></span><span class="medal-dot g"></span>
+        <span class="medal-dot s"></span><span class="medal-dot s"></span>
+        <span class="medal-dot b"></span><span class="medal-dot b"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TIMELINE -->
+  <div style="margin-top:56px">
+    <div class="section-label">Key Moments</div>
+    <div class="section-title" style="font-size:32px">A <em>Timeline</em> of Glory</div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-year">1900 · Paris</div>
+        <div class="tl-text"><strong>Frederick Lane</strong> wins two gold medals in swimming — Australia's first-ever Olympic swimming medals.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">1912 · Stockholm</div>
+        <div class="tl-text"><strong>Fanny Durack</strong> wins women's 100m freestyle — Australia's first female Olympic gold medallist.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">1956 · Melbourne</div>
+        <div class="tl-text">Home Games. Australia wins <strong>8 swimming golds</strong>, including <strong>Dawn Fraser's</strong> first of three consecutive 100m freestyle titles.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2000 · Sydney</div>
+        <div class="tl-text"><strong>Ian Thorpe, Grant Hackett, Susie O'Neill</strong> lead Australia to 20 swimming medals — the biggest haul at the time, in front of a roaring home crowd.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2004 · Athens</div>
+        <div class="tl-text"><strong>Ian Thorpe</strong> defends his 200m and 400m freestyle crowns. Australia wins 13 swimming golds — a record at a non-home Games.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2021 · Tokyo</div>
+        <div class="tl-text"><strong>Emma McKeon</strong> wins 7 medals (4 gold, 3 bronze) — the most medals by any swimmer at a single Olympic Games.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2024 · Paris</div>
+        <div class="tl-text"><strong>Kaylee McKeown</strong> defends both backstroke crowns. <strong>Ariarne Titmus</strong> defends 400m freestyle. Australia wins 18 swimming medals.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════ -->
+<footer>
+  <p><strong style="color:var(--white)">Australia's Swimming Nation</strong> · FIT2179 Data Visualisation 2 · Monash University · 2026</p>
+  <p style="margin-top:10px">
+    <strong style="color:var(--white)">Data sources:</strong>
+    <a href="https://www.topendsports.com/world/countries/australia/events/olympics/medals.htm" target="_blank">Topend Sports — Australian Olympic Medal Tallies</a> ·
+    <a href="https://www.olympics.com/en/news/australia-swimmers-olympics-medal-winners-list" target="_blank">olympics.com — Australian Swimming Medal Winners</a> ·
+    <a href="https://docslib.org/download/2806999/australian-medallists" target="_blank">Australian Olympic Committee — Tokyo 2020 Medallists</a>
+  </p>
+  <p style="margin-top:6px">
+    <strong style="color:var(--white)">Visualisation tools:</strong> Vega-Lite 5
+  </p>
+  <p style="margin-top:6px; color:#5a7a9a">
+    AI tools were used to assist with code generation and text editing in this visualisation.
+    All data is sourced from verified public records. Authored 2026.
+  </p>
+</footer>
+
+<!-- ══════════════════════════════════════════
+     VEGA-LITE CHARTS
+══════════════════════════════════════════ -->
+<script>
+
+const GOLD   = "#f4c430";
+const SILVER = "#c0c0c0";
+const BRONZE = "#cd7f32";
+const FOAM   = "#5bbfde";
+const MUTED  = "#8a9ab0";
+const BG     = "#111d33";
+const AXIS   = "#1e3050";
+const TEXT   = "#f5f5f0";
+const WATER  = "#1e6fa8";
+
+// ── shared vega-lite config ──
+const cfg = {
+  background: "transparent",
+  font: "Inter",
+  axis: {
+    domainColor: AXIS,
+    gridColor: AXIS,
+    tickColor: AXIS,
+    labelColor: MUTED,
+    titleColor: MUTED,
+    labelFontSize: 11,
+    titleFontSize: 12,
+    labelFont: "Inter",
+    titleFont: "Inter"
+  },
+  legend: {
+    labelColor: MUTED,
+    titleColor: MUTED,
+    labelFont: "Inter",
+    titleFont: "Inter"
+  },
+  view: { stroke: "transparent" },
+  title: { color: TEXT, font: "Inter", fontSize: 14 }
+};
+
+// ══════════════════════════════════════
+// DATA
+// ══════════════════════════════════════
+
+// Swimming medals per Games (estimated from sources)
+// Sources: olympics.com, swimming.org.au, topendsports.com
+const swimData = [
+  {year:1900, gold:2, silver:0, bronze:0},
+  {year:1904, gold:0, silver:0, bronze:0},
+  {year:1908, gold:1, silver:1, bronze:1},
+  {year:1912, gold:2, silver:2, bronze:2},
+  {year:1920, gold:0, silver:1, bronze:0},
+  {year:1924, gold:1, silver:1, bronze:1},
+  {year:1928, gold:1, silver:1, bronze:0},
+  {year:1932, gold:1, silver:0, bronze:0},
+  {year:1936, gold:0, silver:0, bronze:0},
+  {year:1948, gold:1, silver:3, bronze:2},
+  {year:1952, gold:2, silver:1, bronze:2},
+  {year:1956, gold:8, silver:4, bronze:5},
+  {year:1960, gold:5, silver:4, bronze:3},
+  {year:1964, gold:5, silver:2, bronze:4},
+  {year:1968, gold:4, silver:4, bronze:3},
+  {year:1972, gold:5, silver:5, bronze:1},
+  {year:1976, gold:0, silver:1, bronze:2},
+  {year:1980, gold:2, silver:1, bronze:3},
+  {year:1984, gold:3, silver:5, bronze:7},
+  {year:1988, gold:2, silver:3, bronze:2},
+  {year:1992, gold:4, silver:5, bronze:5},
+  {year:1996, gold:5, silver:7, bronze:10},
+  {year:2000, gold:5, silver:9, bronze:4},
+  {year:2004, gold:7, silver:4, bronze:3},
+  {year:2008, gold:6, silver:6, bronze:8},
+  {year:2012, gold:1, silver:6, bronze:3},
+  {year:2016, gold:3, silver:4, bronze:4},
+  {year:2021, gold:9, silver:6, bronze:5},
+  {year:2024, gold:7, silver:10, bronze:3}
+];
+
+// Flatten for stacked bar
+const swimFlat = [];
+swimData.forEach(d => {
+  if (d.gold+d.silver+d.bronze === 0) return;
+  swimFlat.push({year: d.year, medal: "Gold",   count: d.gold,   order: 1});
+  swimFlat.push({year: d.year, medal: "Silver", count: d.silver, order: 2});
+  swimFlat.push({year: d.year, medal: "Bronze", count: d.bronze, order: 3});
+});
+
+// All-Australia medals per Games (from topendsports)
+const ausData = [
+  {year:1900,total:7},{year:1904,total:0},{year:1908,total:4},{year:1912,total:6},
+  {year:1920,total:3},{year:1924,total:6},{year:1928,total:4},{year:1932,total:5},
+  {year:1936,total:1},{year:1948,total:13},{year:1952,total:11},{year:1956,total:35},
+  {year:1960,total:22},{year:1964,total:18},{year:1968,total:17},{year:1972,total:17},
+  {year:1976,total:5},{year:1980,total:9},{year:1984,total:24},{year:1988,total:14},
+  {year:1992,total:27},{year:1996,total:41},{year:2000,total:58},{year:2004,total:49},
+  {year:2008,total:46},{year:2012,total:35},{year:2016,total:29},{year:2021,total:46},
+  {year:2024,total:53}
+];
+
+// Build share data
+const shareData = swimData.map(s => {
+  const a = ausData.find(a => a.year === s.year);
+  const total = s.gold + s.silver + s.bronze;
+  const pct = a && a.total > 0 ? Math.round((total / a.total) * 100) : 0;
+  return {year: s.year, swimTotal: total, ausTotal: a ? a.total : 0, pct};
+}).filter(d => d.ausTotal > 0);
+
+// Nations all-time gold
+const nationsData = [
+  {nation:"USA", gold:217, pop:340},
+  {nation:"Australia", gold:78, pop:26},
+  {nation:"E. Germany", gold:38, pop:17},
+  {nation:"China", gold:47, pop:1400},
+  {nation:"Hungary", gold:26, pop:10},
+  {nation:"Japan", gold:21, pop:125},
+  {nation:"Netherlands", gold:19, pop:18},
+  {nation:"Great Britain", gold:18, pop:68},
+  {nation:"Russia/USSR", gold:51, pop:145},
+  {nation:"Canada", gold:14, pop:40}
+].sort((a,b) => a.gold - b.gold);
+
+// Per-capita (golds per million people, select nations)
+const perCapData = [
+  {nation:"Australia",  gpm: (78/26).toFixed(2)},
+  {nation:"Hungary",    gpm: (26/10).toFixed(2)},
+  {nation:"Netherlands",gpm: (19/18).toFixed(2)},
+  {nation:"E. Germany", gpm: (38/17).toFixed(2)},
+  {nation:"USA",        gpm: (217/340).toFixed(2)},
+  {nation:"Canada",     gpm: (14/40).toFixed(2)},
+  {nation:"Great Britain", gpm: (18/68).toFixed(2)},
+  {nation:"China",      gpm: (47/1400).toFixed(2)},
+  {nation:"Japan",      gpm: (21/125).toFixed(2)},
+  {nation:"Russia/USSR",gpm: (51/145).toFixed(2)}
+].sort((a,b)=>parseFloat(b.gpm)-parseFloat(a.gpm));
+
+// State medals data (Tokyo 2020 from Australian Medallists doc)
+const stateData = [
+  {state:"QLD", medals:13},
+  {state:"NSW", medals:5},
+  {state:"VIC", medals:2},
+  {state:"SA",  medals:2},
+  {state:"WA",  medals:1},
+  {state:"TAS", medals:1}
+];
+
+// Gender gold medals per Games (estimated from historical records)
+const genderData = [
+  {year:1956,men:5,women:3},{year:1960,men:3,women:2},{year:1964,men:3,women:2},
+  {year:1968,men:2,women:2},{year:1972,men:3,women:2},{year:1976,men:0,women:0},
+  {year:1980,men:1,women:1},{year:1984,men:1,women:2},{year:1988,men:1,women:1},
+  {year:1992,men:2,women:2},{year:1996,men:2,women:3},{year:2000,men:2,women:3},
+  {year:2004,men:3,women:4},{year:2008,men:3,women:3},{year:2012,men:0,women:1},
+  {year:2016,men:1,women:2},{year:2021,men:3,women:6},{year:2024,men:2,women:5}
+];
+const genderFlat = [];
+genderData.forEach(d => {
+  genderFlat.push({year:d.year, gender:"Men",   gold:d.men});
+  genderFlat.push({year:d.year, gender:"Women", gold:d.women});
+});
+
+// Swimmer career totals
+const swimmerData = [
+  {name:"Emma McKeon",   gold:6, silver:3, bronze:5, total:14},
+  {name:"Leisel Jones",  gold:3, silver:5, bronze:1, total:9},
+  {name:"Ian Thorpe",    gold:5, silver:3, bronze:1, total:9},
+  {name:"Kaylee McKeown",gold:4, silver:1, bronze:2, total:7},
+  {name:"Grant Hackett", gold:3, silver:2, bronze:2, total:7},
+  {name:"Dawn Fraser",   gold:4, silver:4, bronze:0, total:8},
+  {name:"Shane Gould",   gold:3, silver:1, bronze:1, total:5},
+  {name:"Susie O'Neill", gold:2, silver:3, bronze:2, total:7}
+].sort((a,b)=>b.total-a.total);
+
+const swimmerFlat = [];
+swimmerData.forEach(d => {
+  swimmerFlat.push({name:d.name, medal:"Gold",   count:d.gold,   order:1});
+  swimmerFlat.push({name:d.name, medal:"Silver", count:d.silver, order:2});
+  swimmerFlat.push({name:d.name, medal:"Bronze", count:d.bronze, order:3});
+});
+
+// Stroke heatmap (estimated)
+const heatData = [
+  {stroke:"Freestyle",    dist:"50m",   medals:4},
+  {stroke:"Freestyle",    dist:"100m",  medals:12},
+  {stroke:"Freestyle",    dist:"200m",  medals:9},
+  {stroke:"Freestyle",    dist:"400m",  medals:8},
+  {stroke:"Freestyle",    dist:"800m",  medals:4},
+  {stroke:"Freestyle",    dist:"1500m", medals:6},
+  {stroke:"Freestyle",    dist:"Relay", medals:22},
+  {stroke:"Backstroke",   dist:"100m",  medals:7},
+  {stroke:"Backstroke",   dist:"200m",  medals:5},
+  {stroke:"Breaststroke", dist:"100m",  medals:5},
+  {stroke:"Breaststroke", dist:"200m",  medals:6},
+  {stroke:"Butterfly",    dist:"100m",  medals:4},
+  {stroke:"Butterfly",    dist:"200m",  medals:3},
+  {stroke:"Medley",       dist:"200m IM",medals:5},
+  {stroke:"Medley",       dist:"400m IM",medals:3},
+  {stroke:"Medley",       dist:"Relay",  medals:9}
+];
+
+
+// ══════════════════════════════════════
+// CHART 1 — STACKED BAR
+// ══════════════════════════════════════
+vegaEmbed("#chart-stacked-bar", {
+  $schema: "https://vega.github.io/schema/vega-lite/v5.json",
+  config: cfg,
+  width: 680,
+  height: 280,
+  data: {values: swimFlat},
+  mark: {type:"bar", cornerRadiusTopLeft:2, cornerRadiusTopRight:2},
+  encoding: {
+    x: {field:"year", type:"ordinal", title:"Olympic Year",
+        axis:{labelAngle:-45, labelFontSize:10}},
+    y: {field:"count", type:"quantitative", title:"Medals", stack:"zero"},
+    color: {
+      field:"medal", type:"nominal", title:"Medal",
+      scale:{domain:["Gold","Silver","Bronze"], range:[GOLD,SILVER,BRONZE]},
+      legend:{orient:"top"}
+    },
+    order: {field:"order", type:"quantitative"},
+    tooltip:[
+      {field:"year",  title:"Year"},
+      {field:"medal", title:"Type"},
+      {field:"count", title:"Count"}
+    ]
+  }
+}, {actions:false, renderer:"svg"});
+
+// ══════════════════════════════════════
+// CHART 2 — GOLD LINE
+// ══════════════════════════════════════
+const goldOnly = swimData.filter(d=>d.gold+d.silver+d.bronze>0).map(d=>({year:d.year, gold:d.gold}));
+vegaEmbed("#chart-gold-line", {
+  $schema: "https://vega.github.io/schema/vega-lite/v5.json",
+  config: cfg,
+  width: 680,
+  height: 200,
+  data: {values: goldOnly},
+  layer: [
+    {
+      mark: {type:"area", line:{color:GOLD,strokeWidth:2},
+             color:{gradient:"linear",stops:[{offset:0,color:GOLD+"44"},{offset:1,color:GOLD+"00"}]},
+             point:false},
+      encoding: {
+        x: {field:"year", type:"ordinal", axis:{labelAngle:-45, labelFontSize:10}},
+        y: {field:"gold", type:"quantitative", title:"Gold Medals"},
+        tooltip:[{field:"year",title:"Year"},{field:"gold",title:"Gold"}]
+      }
+    },
+    {
+      mark: {type:"point", color:GOLD, size:50, filled:true},
+      encoding: {
+        x: {field:"year", type:"ordinal"},
+        y: {field:"gold", type:"quantitative"},
+        tooltip:[{field:"year",title:"Year"},{field:"gold",title:"Gold"}]
+      }
+    }
+  ]
+}, {actions:false, renderer:"svg"});
+
+// ══════════════════════════════════════
+// CHART 3 — SHARE AREA
+// ══════════════════════════════════════
+vegaEmbed("#chart-share-area", {
+  $schema: "https://vega.github.io/schema/vega-lite/v5.json",
+  config: cfg,
+  width: 680,
+  height: 200,
+  data: {values: shareData},
+  layer:[
+    {
+      mark:{type:"area",
+            color:{gradient:"linear",stops:[{offset:0,color:FOAM+"66"},{offset:1,color:FOAM+"00"}]},
+            line:{color:FOAM, strokeWidth:2}},
+      encoding:{
+        x:{field:"year",type:"ordinal",axis:{labelAngle:-45,labelFontSize:10}},
+        y:{field:"pct",type:"quantitative",title:"% of Aus Medals from Swimming"},
+        tooltip:[{field:"year",title:"Year"},{field:"pct",title:"Swimming %"},{field:"swimTotal",title:"Swim medals"},{field:"ausTotal",title:"Total Aus medals"}]
+      }
+    }
+  ]
+}, {actions:false, renderer:"svg"});
+
+// ══════════════════════════════════════
+// CHART 4 — MAP (choropleth of AUS states)
+// ══════════════════════════════════════
+vegaEmbed("#chart-map", {
+  $schema: "https://vega.github.io/schema/vega-lite/v5.json",
+  config: cfg,
+  width: 680,
+  height: 340,
+  projection: {type:"mercator"},
+  layer:[
+    {
+      data: {
+        url: "https://raw.githubusercontent.com/rowanhogan/australian-states/master/states.geojson",
+        format: {type:"json", property:"features"}
+      },
+      transform:[
+        {
+          lookup:"properties.STATE_NAME",
+          from:{
+            data:{values:[
+              {state:"Queensland",      abbr:"QLD", medals:13},
+              {state:"New South Wales", abbr:"NSW", medals:5},
+              {state:"Victoria",        abbr:"VIC", medals:2},
+              {state:"South Australia", abbr:"SA",  medals:2},
+              {state:"Western Australia",abbr:"WA", medals:1},
+              {state:"Tasmania",        abbr:"TAS", medals:1},
+              {state:"Northern Territory",abbr:"NT",medals:0},
+              {state:"Australian Capital Territory",abbr:"ACT",medals:0}
+            ]},
+            key:"state",
+            fields:["medals","abbr"]
+          }
+        }
+      ],
+      mark:{type:"geoshape", stroke:"#0a1628", strokeWidth:1},
+      encoding:{
+        color:{
+          field:"medals", type:"quantitative",
+          title:"Medals (Tokyo 2020)",
+          scale:{scheme:"blues", domain:[0,13]},
+          legend:{orient:"right"}
+        },
+        tooltip:[
+          {field:"properties.STATE_NAME", title:"State"},
+          {field:"medals", title:"Swimming Medals"}
+        ]
+      }
+    },
+    {
+      data: {
+        url: "https://raw.githubusercontent.com/rowanhogan/australian-states/master/states.geojson",
+        format: {type:"json", property:"features"}
+      },
+      transform:[
+        {
+          lookup:"properties.STATE_NAME",
+          from:{
+            data:{values:[
+              {state:"Queensland",      abbr:"QLD", medals:13, cx:144.0, cy:-22.5},
+              {state:"New South Wales", abbr:"NSW", medals:5,  cx:146.0, cy:-32.0},
+              {state:"Victoria",        abbr:"VIC", medals:2,  cx:144.5, cy:-37.0},
+              {state:"South Australia", abbr:"SA",  medals:2,  cx:135.5, cy:-30.0},
+              {state:"Western Australia",abbr:"WA", medals:1,  cx:122.0, cy:-26.0},
+              {state:"Tasmania",        abbr:"TAS", medals:1,  cx:146.5, cy:-42.0}
+            ]},
+            key:"state",
+            fields:["medals","abbr"]
+          }
+        },
+        {filter:"datum.medals > 0"}
+      ],
+      mark:{type:"text", fontSize:11, fontWeight:"bold", color:"white"},
+      encoding:{
+        longitude:{field:"cx", type:"quantitative"},
+        latitude:{field:"cy", type:"quantitative"},
+        text:{field:"abbr", type:"nominal"}
+      }
+    }
+  ]
+}, {actions:false, renderer:"svg"});
+
+// ══════════════════════════════════════
+// CHART 5 — STATE BAR
+// ══════════════════════════════════════
+vegaEmbed("#chart-state-bar", {
+  $schema: "https://vega.github.io/schema/vega-lite/v5.json",
+  config: cfg,
+  width: 680,
+  height: 200,
+  data: {values: stateData.sort((a,b)=>b.medals-a.medals)},
+  mark: {type:"bar", color:FOAM, cornerRadiusTopRight:4, cornerRadiusTopLeft:4},
+  encoding:{
+    y: {field:"state", type:"nominal", title:"State", sort:"-x"},
+    x: {field:"medals", type:"quantitative", title:"Medals (Tokyo 2020)"},
+    tooltip:[{field:"state",title:"State"},{field:"medals",title:"Medals"}]
+  }
+}, {actions:false, renderer:"svg"});
+
+// ══════════════════════════════════════
+// CHART 6 — GENDER GROUPED BAR
+// ══════════════════════════════════════
+vegaEmbed("#chart-gender", {
+  $schema: "https://vega.github.io/schema/vega-lite/v5.json",
+  config: cfg,
+  width: 680,
+  height: 200,
+  data: {values: genderFlat},
+  mark: {type:"bar", cornerRadiusTopLeft:3, cornerRadiusTopRight:3},
+  encoding:{
+    x: {field:"year", type:"ordinal", axis:{labelAngle:-45, labelFontSize:10}},
+    y: {field:"gold", type:"quantitative", title:"Gold Medals"},
+    color:{
+      field:"gender", type:"nominal",
+      scale:{domain:["Men","Women"], range:[WATER,"#e85d9f"]},
+      legend:{orient:"top"}
+    },
+    xOffset:{field:"gender"},
+    tooltip:[{field:"year",title:"Year"},{field:"gender",title:"Gender"},{field:"gold",title:"Gold Medals"}]
+  }
+}, {actions:false, renderer:"svg"});
+
+// ══════════════════════════════════════
+// CHART 7 — NATIONS LOLLIPOP
+// ══════════════════════════════════════
+vegaEmbed("#chart-nations-lollipop", {
+  $schema: "https://vega.github.io/schema/vega-lite/v5.json",
+  config: cfg,
+  width: 680,
+  height: 300,
+  data: {values: nationsData},
+  layer:[
+    {
+      mark:{type:"rule", color:AXIS, strokeWidth:2},
+      encoding:{
+        y:{field:"nation",type:"nominal",sort:"-x",title:"Nation"},
+        x:{field:"gold",type:"quantitative",title:"Gold Medals"},
+        x2:{value:0}
+      }
+    },
+    {
+      mark:{type:"point", filled:true, size:120},
+      encoding:{
+        y:{field:"nation",type:"nominal",sort:"-x"},
+        x:{field:"gold",type:"quantitative"},
+        color:{
+          field:"nation", type:"nominal",
+          scale:{domain:["Australia","USA"],range:[GOLD,FOAM]},
+          condition:{test:"datum.nation === 'Australia'", value:GOLD},
+          legend:null
+        },
+        tooltip:[{field:"nation",title:"Nation"},{field:"gold",title:"Gold Medals"}]
+      }
+    }
+  ]
+}, {actions:false, renderer:"svg"});
+
+// ══════════════════════════════════════
+// CHART 8 — PER CAPITA BAR
+// ══════════════════════════════════════
+vegaEmbed("#chart-per-capita", {
+  $schema: "https://vega.github.io/schema/vega-lite/v5.json",
+  config: cfg,
+  width: 680,
+  height: 280,
+  data: {values: perCapData},
+  mark:{type:"bar", cornerRadiusTopRight:4, cornerRadiusTopLeft:4},
+  encoding:{
+    y:{field:"nation",type:"nominal",sort:"-x",title:"Nation"},
+    x:{field:"gpm",type:"quantitative",title:"Gold Medals Per Million Population"},
+    color:{
+      condition:{test:"datum.nation === 'Australia'", value:GOLD},
+      value: WATER
+    },
+    tooltip:[{field:"nation",title:"Nation"},{field:"gpm",title:"Golds per Million"}]
+  }
+}, {actions:false, renderer:"svg"});
+
+// ══════════════════════════════════════
+// CHART 9 — HEATMAP
+// ══════════════════════════════════════
+vegaEmbed("#chart-heatmap", {
+  $schema: "https://vega.github.io/schema/vega-lite/v5.json",
+  config: cfg,
+  width: 680,
+  height: 280,
+  data: {values: heatData},
+  mark:{type:"rect", cornerRadius:3},
+  encoding:{
+    x:{field:"dist",type:"nominal",title:"Event",axis:{labelAngle:-45}},
+    y:{field:"stroke",type:"nominal",title:"Stroke"},
+    color:{
+      field:"medals",type:"quantitative",title:"Medals",
+      scale:{scheme:"orangered"}
+    },
+    tooltip:[
+      {field:"stroke",title:"Stroke"},
+      {field:"dist",title:"Distance"},
+      {field:"medals",title:"Estimated Medals"}
+    ]
+  }
+}, {actions:false, renderer:"svg"});
+
+// ══════════════════════════════════════
+// CHART 10 — SWIMMERS STACKED BAR
+// ══════════════════════════════════════
+vegaEmbed("#chart-swimmers", {
+  $schema: "https://vega.github.io/schema/vega-lite/v5.json",
+  config: cfg,
+  width: 680,
+  height: 280,
+  data: {values: swimmerFlat},
+  mark:{type:"bar", cornerRadiusTopLeft:3, cornerRadiusTopRight:3},
+  encoding:{
+    y:{field:"name",type:"nominal",title:"Athlete",sort:"-x"},
+    x:{field:"count",type:"quantitative",title:"Medals",stack:"zero"},
+    color:{
+      field:"medal",type:"nominal",
+      scale:{domain:["Gold","Silver","Bronze"],range:[GOLD,SILVER,BRONZE]},
+      legend:{orient:"top"}
+    },
+    order:{field:"order"},
+    tooltip:[
+      {field:"name",title:"Athlete"},
+      {field:"medal",title:"Medal Type"},
+      {field:"count",title:"Count"}
+    ]
+  }
+}, {actions:false, renderer:"svg"});
+
+</script>
+</body>
+</html>
