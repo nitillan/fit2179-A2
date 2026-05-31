@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Australia's Swimming Nation — Olympic Glory</title>
-  <script src="https://cdn.jsdelivr.net/npm/vega@5.30.0"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.20.1"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.26.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet" />
@@ -139,7 +139,7 @@
     /* ── SECTION LAYOUT ── */
     .section {
       padding: 80px 24px;
-      max-width: 1280px;
+      max-width: 1160px;
       margin: 0 auto;
     }
 
@@ -183,8 +183,6 @@
 
     /* ── CHART CARD ── */
     .chart-card {
-      width: 100%;
-      overflow-x: auto;
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 12px;
@@ -211,7 +209,7 @@
       gap: 24px;
     }
 
-    .chart-row.cols-2 { grid-template-columns: 1fr 1fr; min-width: 0; }
+    .chart-row.cols-2 { grid-template-columns: 1fr 1fr; }
     .chart-row.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
 
     @media (max-width: 760px) {
@@ -373,15 +371,6 @@
     footer a { color: var(--foam); text-decoration: none; }
     footer a:hover { text-decoration: underline; }
 
-    /* ── RESPONSIVE CHARTS ── */
-    .vega-embed {
-      width: 100% !important;
-    }
-    .vega-embed canvas,
-    .vega-embed svg {
-      max-width: 100% !important;
-    }
-
     /* vega tooltip override */
     .vg-tooltip {
       background: var(--deep) !important;
@@ -514,30 +503,6 @@
       <div id="chart-gender"></div>
     </div>
   </div>
-</div>
-
-<hr class="divider" />
-
-<!-- ══════════════════════════════════════════
-     SECTION 2B — BUMP + DONUT + ANNOTATED
-══════════════════════════════════════════ -->
-<div class="section">
-  <div class="section-label">Section 02 · continued</div>
-  <div class="section-title">The <em>Rise & Fall</em> of a Dynasty</div>
-  <p class="section-body">
-    Australia's dominance hasn't been constant — the 1970s saw a dramatic slump before
-    a golden revival through the 1990s and 2000s. These three visualisations show the
-    bigger picture: how Australia's ranking shifted over time, how dominant swimming is
-    within Australia's overall Olympic identity, and the key moments that defined the story.
-  </p>
-
-  <div class="chart-card">
-    <h3>Australia's Swimming Medal Rank Among All Nations — Per Games</h3>
-    <p class="chart-note">Rank 1 = most swimming medals that Games. Rank goes down = Australia improving. Hover for details.</p>
-    <div id="chart-bump"></div>
-  </div>
-
-
 </div>
 
 <hr class="divider" />
@@ -918,7 +883,7 @@ const heatData = [
 vegaEmbed("#chart-stacked-bar", {
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
   config: cfg,
-  width: 500,
+  width: 680,
   height: 280,
   data: {values: swimFlat},
   mark: {type:"bar", cornerRadiusTopLeft:2, cornerRadiusTopRight:2},
@@ -938,7 +903,7 @@ vegaEmbed("#chart-stacked-bar", {
       {field:"count", title:"Count"}
     ]
   }
-}, {actions:false, renderer:"canvas", width: "container"});
+}, {actions:false, renderer:"svg"});
 
 // ══════════════════════════════════════
 // CHART 2 — GOLD LINE
@@ -947,7 +912,7 @@ const goldOnly = swimData.filter(d=>d.gold+d.silver+d.bronze>0).map(d=>({year:d.
 vegaEmbed("#chart-gold-line", {
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
   config: cfg,
-  width: 500,
+  width: 680,
   height: 200,
   data: {values: goldOnly},
   layer: [
@@ -970,7 +935,7 @@ vegaEmbed("#chart-gold-line", {
       }
     }
   ]
-}, {actions:false, renderer:"canvas", width: "container"});
+}, {actions:false, renderer:"svg"});
 
 // ══════════════════════════════════════
 // CHART 3 — SHARE AREA
@@ -978,7 +943,7 @@ vegaEmbed("#chart-gold-line", {
 vegaEmbed("#chart-share-area", {
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
   config: cfg,
-  width: 500,
+  width: 680,
   height: 200,
   data: {values: shareData},
   layer:[
@@ -993,7 +958,7 @@ vegaEmbed("#chart-share-area", {
       }
     }
   ]
-}, {actions:false, renderer:"canvas", width: "container"});
+}, {actions:false, renderer:"svg"});
 
 // ══════════════════════════════════════
 // CHART 4 — MAP (choropleth of AUS states)
@@ -1001,7 +966,7 @@ vegaEmbed("#chart-share-area", {
 vegaEmbed("#chart-map", {
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
   config: cfg,
-  width: 500,
+  width: 680,
   height: 340,
   projection: {type:"mercator"},
   layer:[
@@ -1074,7 +1039,7 @@ vegaEmbed("#chart-map", {
       }
     }
   ]
-}, {actions:false, renderer:"canvas", width: "container"});
+}, {actions:false, renderer:"svg"});
 
 // ══════════════════════════════════════
 // CHART 5 — STATE BAR
@@ -1082,7 +1047,7 @@ vegaEmbed("#chart-map", {
 vegaEmbed("#chart-state-bar", {
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
   config: cfg,
-  width: 500,
+  width: 680,
   height: 200,
   data: {values: stateData.sort((a,b)=>b.medals-a.medals)},
   mark: {type:"bar", color:FOAM, cornerRadiusTopRight:4, cornerRadiusTopLeft:4},
@@ -1091,7 +1056,7 @@ vegaEmbed("#chart-state-bar", {
     x: {field:"medals", type:"quantitative", title:"Medals (Tokyo 2020)"},
     tooltip:[{field:"state",title:"State"},{field:"medals",title:"Medals"}]
   }
-}, {actions:false, renderer:"canvas", width: "container"});
+}, {actions:false, renderer:"svg"});
 
 // ══════════════════════════════════════
 // CHART 6 — GENDER GROUPED BAR
@@ -1099,7 +1064,7 @@ vegaEmbed("#chart-state-bar", {
 vegaEmbed("#chart-gender", {
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
   config: cfg,
-  width: 500,
+  width: 680,
   height: 200,
   data: {values: genderFlat},
   mark: {type:"bar", cornerRadiusTopLeft:3, cornerRadiusTopRight:3},
@@ -1114,7 +1079,7 @@ vegaEmbed("#chart-gender", {
     xOffset:{field:"gender"},
     tooltip:[{field:"year",title:"Year"},{field:"gender",title:"Gender"},{field:"gold",title:"Gold Medals"}]
   }
-}, {actions:false, renderer:"canvas", width: "container"});
+}, {actions:false, renderer:"svg"});
 
 // ══════════════════════════════════════
 // CHART 7 — NATIONS LOLLIPOP
@@ -1122,7 +1087,7 @@ vegaEmbed("#chart-gender", {
 vegaEmbed("#chart-nations-lollipop", {
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
   config: cfg,
-  width: 500,
+  width: 680,
   height: 300,
   data: {values: nationsData},
   layer:[
@@ -1149,7 +1114,7 @@ vegaEmbed("#chart-nations-lollipop", {
       }
     }
   ]
-}, {actions:false, renderer:"canvas", width: "container"});
+}, {actions:false, renderer:"svg"});
 
 // ══════════════════════════════════════
 // CHART 8 — PER CAPITA BAR
@@ -1157,7 +1122,7 @@ vegaEmbed("#chart-nations-lollipop", {
 vegaEmbed("#chart-per-capita", {
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
   config: cfg,
-  width: 500,
+  width: 680,
   height: 280,
   data: {values: perCapData},
   mark:{type:"bar", cornerRadiusTopRight:4, cornerRadiusTopLeft:4},
@@ -1170,7 +1135,7 @@ vegaEmbed("#chart-per-capita", {
     },
     tooltip:[{field:"nation",title:"Nation"},{field:"gpm",title:"Golds per Million"}]
   }
-}, {actions:false, renderer:"canvas", width: "container"});
+}, {actions:false, renderer:"svg"});
 
 // ══════════════════════════════════════
 // CHART 9 — HEATMAP
@@ -1178,7 +1143,7 @@ vegaEmbed("#chart-per-capita", {
 vegaEmbed("#chart-heatmap", {
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
   config: cfg,
-  width: 500,
+  width: 680,
   height: 280,
   data: {values: heatData},
   mark:{type:"rect", cornerRadius:3},
@@ -1195,7 +1160,7 @@ vegaEmbed("#chart-heatmap", {
       {field:"medals",title:"Estimated Medals"}
     ]
   }
-}, {actions:false, renderer:"canvas", width: "container"});
+}, {actions:false, renderer:"svg"});
 
 // ══════════════════════════════════════
 // CHART 10 — SWIMMERS STACKED BAR
@@ -1203,7 +1168,7 @@ vegaEmbed("#chart-heatmap", {
 vegaEmbed("#chart-swimmers", {
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
   config: cfg,
-  width: 500,
+  width: 680,
   height: 280,
   data: {values: swimmerFlat},
   mark:{type:"bar", cornerRadiusTopLeft:3, cornerRadiusTopRight:3},
@@ -1222,51 +1187,8 @@ vegaEmbed("#chart-swimmers", {
       {field:"count",title:"Count"}
     ]
   }
-}, {actions:false, renderer:"canvas", width: "container"});
+}, {actions:false, renderer:"svg"});
 
-// ══════════════════════════════════════
-// CHART 11 — BUMP CHART (Australia's rank per Games)
-// ══════════════════════════════════════
-const bumpData = [
-  {year:1900,rank:1},{year:1908,rank:2},{year:1912,rank:2},
-  {year:1924,rank:3},{year:1948,rank:3},{year:1952,rank:2},
-  {year:1956,rank:2},{year:1960,rank:2},{year:1964,rank:2},
-  {year:1968,rank:2},{year:1972,rank:2},{year:1976,rank:5},
-  {year:1980,rank:4},{year:1984,rank:3},{year:1988,rank:3},
-  {year:1992,rank:3},{year:1996,rank:2},{year:2000,rank:2},
-  {year:2004,rank:2},{year:2008,rank:2},{year:2012,rank:3},
-  {year:2016,rank:3},{year:2021,rank:2},{year:2024,rank:2}
-];
-
-vegaEmbed("#chart-bump", {
-  $schema: "https://vega.github.io/schema/vega-lite/v5.json",
-  config: cfg,
-  width: 500,
-  height: 280,
-  data: {values: bumpData},
-  layer: [
-    {
-      mark: {type:"line", strokeWidth:3, color:FOAM, point:{filled:true, fill:GOLD, size:80}},
-      encoding: {
-        x: {field:"year", type:"ordinal", title:"Olympic Year", axis:{labelAngle:-45}},
-        y: {field:"rank", type:"quantitative", title:"Medal Rank (1 = Best)",
-            scale:{domain:[6,1]},
-            axis:{tickMinStep:1}},
-        tooltip:[
-          {field:"year", title:"Year"},
-          {field:"rank", title:"Australia's Rank"}
-        ]
-      }
-    },
-    {
-      mark: {type:"text", dy:-14, fontSize:11, fontWeight:"bold", color:GOLD},
-      encoding: {
-        x: {field:"year", type:"ordinal"},
-        y: {field:"rank", type:"quantitative", scale:{domain:[6,1]}},
-        text: {field:"rank", type:"quantitative"}
-      }
-    }
-  ]
-}, {actions:false, renderer:"canvas", width: "container"});
-
-
+</script>
+</body>
+</html>
