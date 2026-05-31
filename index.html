@@ -883,7 +883,7 @@ const heatData = [
 vegaEmbed("#chart-stacked-bar", {
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
   config: cfg,
-  width: "container",
+  width: 680,
   height: 280,
   data: {values: swimFlat},
   mark: {type:"bar", cornerRadiusTopLeft:2, cornerRadiusTopRight:2},
@@ -903,7 +903,7 @@ vegaEmbed("#chart-stacked-bar", {
       {field:"count", title:"Count"}
     ]
   }
-}, {actions:false});
+}, {actions:false, renderer:"svg"});
 
 // ══════════════════════════════════════
 // CHART 2 — GOLD LINE
@@ -912,7 +912,7 @@ const goldOnly = swimData.filter(d=>d.gold+d.silver+d.bronze>0).map(d=>({year:d.
 vegaEmbed("#chart-gold-line", {
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
   config: cfg,
-  width: "container",
+  width: 680,
   height: 200,
   data: {values: goldOnly},
   layer: [
@@ -935,7 +935,7 @@ vegaEmbed("#chart-gold-line", {
       }
     }
   ]
-}, {actions:false});
+}, {actions:false, renderer:"svg"});
 
 // ══════════════════════════════════════
 // CHART 3 — SHARE AREA
@@ -943,7 +943,7 @@ vegaEmbed("#chart-gold-line", {
 vegaEmbed("#chart-share-area", {
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
   config: cfg,
-  width: "container",
+  width: 680,
   height: 200,
   data: {values: shareData},
   layer:[
@@ -958,7 +958,7 @@ vegaEmbed("#chart-share-area", {
       }
     }
   ]
-}, {actions:false});
+}, {actions:false, renderer:"svg"});
 
 // ══════════════════════════════════════
 // CHART 4 — MAP (choropleth of AUS states)
@@ -966,7 +966,7 @@ vegaEmbed("#chart-share-area", {
 vegaEmbed("#chart-map", {
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
   config: cfg,
-  width: "container",
+  width: 680,
   height: 340,
   projection: {type:"mercator"},
   layer:[
@@ -1039,7 +1039,7 @@ vegaEmbed("#chart-map", {
       }
     }
   ]
-}, {actions:false});
+}, {actions:false, renderer:"svg"});
 
 // ══════════════════════════════════════
 // CHART 5 — STATE BAR
@@ -1047,7 +1047,7 @@ vegaEmbed("#chart-map", {
 vegaEmbed("#chart-state-bar", {
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
   config: cfg,
-  width: "container",
+  width: 680,
   height: 200,
   data: {values: stateData.sort((a,b)=>b.medals-a.medals)},
   mark: {type:"bar", color:FOAM, cornerRadiusTopRight:4, cornerRadiusTopLeft:4},
@@ -1056,7 +1056,7 @@ vegaEmbed("#chart-state-bar", {
     x: {field:"medals", type:"quantitative", title:"Medals (Tokyo 2020)"},
     tooltip:[{field:"state",title:"State"},{field:"medals",title:"Medals"}]
   }
-}, {actions:false});
+}, {actions:false, renderer:"svg"});
 
 // ══════════════════════════════════════
 // CHART 6 — GENDER GROUPED BAR
@@ -1064,7 +1064,7 @@ vegaEmbed("#chart-state-bar", {
 vegaEmbed("#chart-gender", {
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
   config: cfg,
-  width: "container",
+  width: 680,
   height: 200,
   data: {values: genderFlat},
   mark: {type:"bar", cornerRadiusTopLeft:3, cornerRadiusTopRight:3},
@@ -1079,7 +1079,7 @@ vegaEmbed("#chart-gender", {
     xOffset:{field:"gender"},
     tooltip:[{field:"year",title:"Year"},{field:"gender",title:"Gender"},{field:"gold",title:"Gold Medals"}]
   }
-}, {actions:false});
+}, {actions:false, renderer:"svg"});
 
 // ══════════════════════════════════════
 // CHART 7 — NATIONS LOLLIPOP
@@ -1087,7 +1087,7 @@ vegaEmbed("#chart-gender", {
 vegaEmbed("#chart-nations-lollipop", {
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
   config: cfg,
-  width: "container",
+  width: 680,
   height: 300,
   data: {values: nationsData},
   layer:[
@@ -1114,7 +1114,7 @@ vegaEmbed("#chart-nations-lollipop", {
       }
     }
   ]
-}, {actions:false});
+}, {actions:false, renderer:"svg"});
 
 // ══════════════════════════════════════
 // CHART 8 — PER CAPITA BAR
@@ -1122,7 +1122,7 @@ vegaEmbed("#chart-nations-lollipop", {
 vegaEmbed("#chart-per-capita", {
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
   config: cfg,
-  width: "container",
+  width: 680,
   height: 280,
   data: {values: perCapData},
   mark:{type:"bar", cornerRadiusTopRight:4, cornerRadiusTopLeft:4},
@@ -1135,7 +1135,7 @@ vegaEmbed("#chart-per-capita", {
     },
     tooltip:[{field:"nation",title:"Nation"},{field:"gpm",title:"Golds per Million"}]
   }
-}, {actions:false});
+}, {actions:false, renderer:"svg"});
 
 // ══════════════════════════════════════
 // CHART 9 — HEATMAP
@@ -1143,7 +1143,7 @@ vegaEmbed("#chart-per-capita", {
 vegaEmbed("#chart-heatmap", {
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
   config: cfg,
-  width: "container",
+  width: 680,
   height: 280,
   data: {values: heatData},
   mark:{type:"rect", cornerRadius:3},
@@ -1160,7 +1160,7 @@ vegaEmbed("#chart-heatmap", {
       {field:"medals",title:"Estimated Medals"}
     ]
   }
-}, {actions:false});
+}, {actions:false, renderer:"svg"});
 
 // ══════════════════════════════════════
 // CHART 10 — SWIMMERS STACKED BAR
@@ -1168,7 +1168,7 @@ vegaEmbed("#chart-heatmap", {
 vegaEmbed("#chart-swimmers", {
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
   config: cfg,
-  width: "container",
+  width: 680,
   height: 280,
   data: {values: swimmerFlat},
   mark:{type:"bar", cornerRadiusTopLeft:3, cornerRadiusTopRight:3},
@@ -1187,7 +1187,7 @@ vegaEmbed("#chart-swimmers", {
       {field:"count",title:"Count"}
     ]
   }
-}, {actions:false});
+}, {actions:false, renderer:"svg"});
 
 </script>
 </body>
